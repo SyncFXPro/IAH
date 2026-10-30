@@ -1,63 +1,56 @@
 # Glance
 
-IAH (I Am Here) is an open-source Windows 11 desktop utility. The application is named Glance. It is meant to notice which monitor you are looking at and, later, move the cursor there.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-The mathematical model lives in [math.md](math.md). Code follows that document. It does not replace it.
+Glance is a Windows desktop utility. A webcam watches your eyes, Glance decides which monitor you are looking at, and it moves the cursor there. It then brings forward the topmost window on that monitor and, when it can, returns the keyboard to the last text box you used in that window.
 
-This build is a skeleton. It is not a working eye tracker.
+The repository is public. The code is [MIT licensed](LICENSE).
 
-## What is real
+![Glance dashboard, with eye tracking on and three monitors laid out](docs/dashboard.png)
 
-- A Windows 11-style WPF shell, with Dashboard, Calibration, and Settings.
-- A system tray icon. Closing the window leaves Glance running. Exit is on the tray menu.
-- Settings saved under `%LOCALAPPDATA%\Glance\settings.json`.
-- Optional sign-in startup, written only after you turn that setting on.
-- Live Windows display enumeration, including negative virtual-desktop coordinates and monitors that sit above or beside each other.
-- A calibration target that can be placed on a chosen display. Confirming it stores a display-addressing check only. That file has no gaze samples and the classifier refuses it.
-- The math from `math.md`: yaw and pitch from a 3D direction, signed 2D angles, wrapped angular rate, normalized distance, and regularized Mahalanobis distance once a monitor has enough samples.
-- A switch state machine. Fast feature change can open a candidate. Only a settled position classification can confirm a monitor.
-- The pointer is never moved. A policy blocks relocation unless a real webcam classifier is running, and this build has no such classifier.
+## What it does
 
-## What is not real
+- Tracks one face from the webcam and reads where each iris sits in its eye.
+- Learns a region for each monitor from five calibration dots: the four corners and the center.
+- Moves the cursor when a glance stays on one monitor.
+- Activates the frontmost normal window on that monitor. Glance does not force the focus if Windows refuses it.
+- Remembers the last editable control in that window and restores it on the way back.
+- Shows head yaw, the feature graph, and the raw measurements only in Developer view.
 
-- No webcam is opened.
-- No ONNX model is loaded. The weights are downloaded locally and gitignored. The implementation order is [docs/INFERENCE-PLAN.md](docs/INFERENCE-PLAN.md). Tensor names are in [docs/MODEL.md](docs/MODEL.md).
-- Iris pixels are not turned into a 3D gaze vector. Head yaw, head pitch, iris position, classification distance, and frame latency stay "Not measured".
-- The highlighted monitor in the dashboard, when eye tracking is on, is a timer. It is labeled as a scripted preview.
-- No latency numbers in the UI were measured. The histogram type exists and is unit-tested with caller-supplied samples only.
-- Monitor rectangles are drawn so you can see the Windows layout. They are not physical gaze angles.
+Frames, landmarks, and calibration stay on this computer. Glance does not upload them and it does not send telemetry.
 
 ## Run
 
-Requires the .NET 9 SDK and the Windows desktop runtime.
+You need the .NET 9 SDK and the Windows desktop runtime.
 
 ```text
 dotnet test tests/Glance.Tests/Glance.Tests.csproj
 dotnet run --project src/Glance.App/Glance.App.csproj
 ```
 
-Startup registration launches the same executable with `--background`, which opens the tray without the main window.
+The face detector and the 478-point landmarker are not in git. Download these two files from the `weights` release of [yakhyo/mediapipe-face-mesh-onnx](https://github.com/yakhyo/mediapipe-face-mesh-onnx) and place them in `assets/models`:
 
-Sign-in registration is off until you enable it in Settings. Cursor movement stays disarmed in this build even if that preference is saved.
+- `face_detection_short_range.onnx`
+- `face_landmarker_Nx3x256x256.onnx`
+
+Those weights stay under their own Apache-2.0 terms. Glance runs both graphs on the GPU through DirectML when that provider can load them, and on the CPU otherwise.
+
+Settings, the gaze profile, and logs are under `%LOCALAPPDATA%\Glance`. Sign-in startup stays off until you turn it on in Settings.
 
 ## Layout
 
 ```text
 Glance.sln
-src/Glance.App          WPF shell, tray, settings, scripted preview
-src/Glance.Tracking     Camera and model adapters (not connected)
-src/Glance.Core         math.md, calibration, classification, switching
-src/Glance.Windows      Displays, cursor policy, startup registration
+src/Glance.App          WPF shell, tray, calibration, developer view
+src/Glance.Tracking     Webcam, ONNX face pipeline, iris measurement
+src/Glance.Core         Calibration, regions, switching
+src/Glance.Windows      Displays, cursor, window focus
 tests/Glance.Tests
-assets/models           Weights are not vendored
-docs
-math.md                 Mathematical model
+assets/models           Model weights, not committed
+docs/dashboard.png      Screenshot used above
+math.md                 Geometry notes
 ```
 
-## Privacy
+## License
 
-Frames, landmarks, and calibration samples are not uploaded. This build does not capture frames. The only files written are local settings, an optional display-addressing check, and an optional log if you enable it. There is no telemetry.
-
-## Next step
-
-Port the face detector post-process and the 478-point landmarker described in [docs/MODEL.md](docs/MODEL.md). Until that exists, do not treat dashboard highlights as gaze.
+[MIT](LICENSE). Copyright (c) 2026 SyncFXPro.
