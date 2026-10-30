@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>Glance.Core</RootNamespace>
+    <Description>Gaze features, calibration math, classification, and the monitor switch state machine.</Description>
+  </PropertyGroup>
+
+</Project>

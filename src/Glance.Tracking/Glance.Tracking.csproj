@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>Glance.Tracking</RootNamespace>
+    <Description>Camera, model, and inference adapters. The skeleton does not run a webcam or ONNX model.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Glance.Core\Glance.Core.csproj" />
+  </ItemGroup>
+
+</Project>

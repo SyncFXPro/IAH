@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <Company>Glance</Company>
+    <Product>Glance</Product>
+    <Version>0.1.0</Version>
+    <Copyright>Copyright (c) Glance contributors</Copyright>
+  </PropertyGroup>
+</Project>

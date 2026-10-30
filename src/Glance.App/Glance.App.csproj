@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.22000.0</SupportedOSPlatformVersion>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\glance.ico</ApplicationIcon>
+    <RootNamespace>Glance.App</RootNamespace>
+    <AssemblyName>Glance</AssemblyName>
+    <Description>Glance looks at which monitor you are facing and can move the cursor there. This build previews the shell with scripted monitor highlights only.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Glance.Core\Glance.Core.csproj" />
+    <ProjectReference Include="..\Glance.Tracking\Glance.Tracking.csproj" />
+    <ProjectReference Include="..\Glance.Windows\Glance.Windows.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="H.NotifyIcon.Wpf" Version="2.3.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.22" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.22" />
+    <PackageReference Include="WPF-UI" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\glance.png" />
+    <Resource Include="Assets\glance.ico" />
+  </ItemGroup>
+
+</Project>
