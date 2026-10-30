@@ -3,7 +3,6 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0-windows</TargetFramework>
-    <SupportedOSPlatformVersion>10.0.22000.0</SupportedOSPlatformVersion>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\glance.ico</ApplicationIcon>
@@ -23,7 +22,14 @@
     <PackageReference Include="H.NotifyIcon.Wpf" Version="2.3.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.22" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.22" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.DirectML" Version="1.24.4" />
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.13.0.20260627" />
     <PackageReference Include="WPF-UI" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\assets\models\face_detection_short_range.onnx" Link="models\face_detection_short_range.onnx" CopyToOutputDirectory="PreserveNewest" Condition="Exists('..\..\assets\models\face_detection_short_range.onnx')" />
+    <Content Include="..\..\assets\models\face_landmarker_Nx3x256x256.onnx" Link="models\face_landmarker_Nx3x256x256.onnx" CopyToOutputDirectory="PreserveNewest" Condition="Exists('..\..\assets\models\face_landmarker_Nx3x256x256.onnx')" />
   </ItemGroup>
 
   <ItemGroup>

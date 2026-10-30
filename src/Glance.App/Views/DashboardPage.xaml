@@ -1,0 +1,201 @@
+<Page x:Class="Glance.App.Views.DashboardPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      Title="Dashboard"
+      Background="Transparent">
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="Show" />
+    </Page.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="8,40,8,16">
+        <StackPanel MaxWidth="760">
+            <TextBlock Text="Glance" Style="{StaticResource PageTitle}" />
+            <TextBlock Text="{Binding Headline}" FontSize="16" Margin="0,0,0,16" />
+
+            <Border Style="{StaticResource SectionCard}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Eye tracking" Style="{StaticResource SettingTitle}" VerticalAlignment="Center" />
+                    <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding TrackingEnabled}" />
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <TextBlock Text="Displays" Style="{StaticResource SettingTitle}" Margin="0,0,0,12" />
+                    <ItemsControl ItemsSource="{Binding Tiles}" Width="640" Height="180" HorizontalAlignment="Left">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Width="640" Height="180" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Canvas.Left" Value="{Binding CanvasLeft}" />
+                                <Setter Property="Canvas.Top" Value="{Binding CanvasTop}" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}" CornerRadius="6" Padding="8">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+                                            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+                                            <Setter Property="BorderThickness" Value="1" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
+                                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                                    <Setter Property="BorderThickness" Value="2" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Title}" TextWrapping="Wrap" FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding Detail}" Style="{StaticResource SubtleText}" />
+                                        <TextBlock Text="{Binding Badge}" FontSize="12" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <TextBlock Text="{Binding CalibrationLabel}" Style="{StaticResource SettingTitle}" />
+                    <ui:Button Content="Calibrate" Appearance="Primary" Command="{Binding OpenCalibrationCommand}" HorizontalAlignment="Left" Margin="0,12,0,0" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <TextBlock Text="Webcam" Style="{StaticResource SettingTitle}" />
+                    <ComboBox ItemsSource="{Binding Cameras}"
+                              SelectedItem="{Binding SelectedCamera}"
+                              DisplayMemberPath="Name"
+                              Margin="0,8,0,8" />
+                    <TextBlock Text="{Binding CameraMessage}" Style="{StaticResource SubtleText}" Margin="0,0,0,8" />
+                    <ui:Button Content="Settings" Appearance="Secondary" Command="{Binding OpenSettingsCommand}" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource SectionCard}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Developer view" Style="{StaticResource SettingTitle}" VerticalAlignment="Center" />
+                    <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding DeveloperView}" />
+                </Grid>
+            </Border>
+
+            <StackPanel Visibility="{Binding DeveloperView, Converter={StaticResource Show}}">
+            <Border Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <TextBlock Text="Feature region" Style="{StaticResource SettingTitle}" />
+                    <TextBlock Text="{Binding FeatureCaption}" Style="{StaticResource SubtleText}" Margin="0,4,0,12" TextWrapping="Wrap" />
+                    <ItemsControl ItemsSource="{Binding FeatureDots}" Width="640" Height="200" HorizontalAlignment="Left">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Width="640" Height="200" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Canvas.Left" Value="{Binding CanvasLeft}" />
+                                <Setter Property="Canvas.Top" Value="{Binding CanvasTop}" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Width="72">
+                                    <Ellipse Width="{Binding Size}" Height="{Binding Size}" Fill="{Binding Fill}" HorizontalAlignment="Left" />
+                                    <TextBlock Text="{Binding Label}" FontSize="11" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource SectionCard}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Margin="0,0,12,10">
+                        <TextBlock Text="{Binding HeadYawCaption}" Style="{StaticResource SubtleText}" />
+                        <TextBlock Text="{Binding HeadYaw}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Margin="0,0,0,10">
+                        <TextBlock Text="{Binding HeadPitchCaption}" Style="{StaticResource SubtleText}" />
+                        <TextBlock Text="{Binding HeadPitch}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Margin="0,0,12,10">
+                        <TextBlock Text="Iris X" Style="{StaticResource SubtleText}" />
+                        <TextBlock Text="{Binding IrisX}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,10">
+                        <TextBlock Text="Iris Y" Style="{StaticResource SubtleText}" />
+                        <TextBlock Text="{Binding IrisY}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,10">
+                        <TextBlock Text="Face position and scale" Style="{StaticResource SubtleText}" />
+                        <TextBlock Text="{Binding FacePosition}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Margin="0,0,12,10">
+                        <TextBlock Text="Predicted monitor" Style="{StaticResource SubtleText}" />
+                        <TextBlock Text="{Binding PredictedMonitor}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,0,0,10">
+                        <TextBlock Text="Classification distance" Style="{StaticResource SubtleText}" />
+                        <TextBlock Text="{Binding Distance}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="4" Margin="0,0,12,0">
+                        <TextBlock Text="Switch state" Style="{StaticResource SubtleText}" />
+                        <TextBlock Text="{Binding SwitchState}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="4" Grid.Column="1">
+                        <TextBlock Text="Time since last confirmation" Style="{StaticResource SubtleText}" />
+                        <TextBlock Text="{Binding SinceConfirmation}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <TextBlock Text="{Binding Detail}" TextWrapping="Wrap" Margin="0,0,0,8" />
+                    <TextBlock Text="{Binding Webcam}" />
+                    <TextBlock Text="{Binding Model}" Margin="0,4,0,0" />
+                    <TextBlock Text="{Binding Classifier}" Margin="0,4,0,0" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding Latency}" Margin="0,4,0,0" Style="{StaticResource SubtleText}" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:Button Content="Landmark preview" Appearance="Secondary" Command="{Binding OpenLandmarkPreviewCommand}" Margin="0,0,8,0" />
+                        <ui:Button Content="Refresh cameras" Appearance="Secondary" Command="{Binding RefreshCamerasCommand}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

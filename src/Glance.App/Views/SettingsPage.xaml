@@ -1,0 +1,106 @@
+<Page x:Class="Glance.App.Views.SettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      Title="Settings"
+      Background="Transparent">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="8,48,8,24">
+        <StackPanel MaxWidth="760">
+            <TextBlock Text="Settings" Style="{StaticResource PageTitle}" />
+            <TextBlock Style="{StaticResource SubtleText}" Margin="0,0,0,12" Text="{Binding Status}" />
+
+            <Border Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <TextBlock Text="Appearance" FontWeight="SemiBold" Margin="0,0,0,8" />
+                    <TextBlock Text="Theme" Style="{StaticResource SubtleText}" />
+                    <ComboBox ItemsSource="{Binding Themes}" SelectedItem="{Binding ThemeName}" Margin="0,4,0,12" />
+                    <DockPanel Margin="0,4,0,0">
+                        <ui:ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding LaunchAtStartup}" />
+                        <StackPanel>
+                            <TextBlock Text="Start with Windows" Style="{StaticResource SettingTitle}" />
+                            <TextBlock Style="{StaticResource SubtleText}" Text="Opens Glance to the tray when you sign in." />
+                        </StackPanel>
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <TextBlock Text="Tracking" FontWeight="SemiBold" Margin="0,0,0,8" />
+                    <DockPanel Margin="0,0,0,12">
+                        <ui:ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding TrackingEnabled}" />
+                        <StackPanel>
+                            <TextBlock Text="Eye tracking" Style="{StaticResource SettingTitle}" />
+                            <TextBlock Style="{StaticResource SubtleText}" Text="Opens the saved webcam. With no saved webcam, the scripted preview stays on." />
+                        </StackPanel>
+                    </DockPanel>
+                    <TextBlock Text="Switching dwell" Style="{StaticResource SubtleText}" />
+                    <ComboBox ItemsSource="{Binding DwellChoices}"
+                              DisplayMemberPath="Label"
+                              SelectedItem="{Binding SelectedDwell}"
+                              Margin="0,4,0,0" />
+                    <TextBlock Style="{StaticResource SubtleText}" Margin="0,6,0,0"
+                               Text="How long a candidate must stay selected before confirmation. This is not a measured gaze latency." />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <TextBlock Text="Cursor" FontWeight="SemiBold" Margin="0,0,0,8" />
+                    <DockPanel>
+                        <ui:ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding CursorMovementEnabled}" />
+                        <StackPanel>
+                            <TextBlock Text="Allow cursor movement" Style="{StaticResource SettingTitle}" />
+                            <TextBlock Style="{StaticResource SubtleText}"
+                                       Text="Saved for later. This build never moves the pointer, even when the switch is on." />
+                        </StackPanel>
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <TextBlock Text="Camera" FontWeight="SemiBold" Margin="0,0,0,8" />
+                    <ComboBox ItemsSource="{Binding Cameras}"
+                              SelectedItem="{Binding SelectedCamera}"
+                              DisplayMemberPath="Name" />
+                    <TextBlock Text="Capture size" Style="{StaticResource SubtleText}" Margin="0,12,0,0" />
+                    <ComboBox ItemsSource="{Binding CaptureChoices}"
+                              SelectedItem="{Binding SelectedCapture}"
+                              DisplayMemberPath="Label"
+                              Margin="0,4,0,0" />
+                    <TextBlock Style="{StaticResource SubtleText}" Margin="0,8,0,0"
+                               Text="Automatic leaves the camera at its own resolution. A listed size is only a request. The dashboard and landmark preview show the size OpenCV actually delivered. The face models still resize that frame internally." />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <TextBlock Text="Calibration" FontWeight="SemiBold" Margin="0,0,0,8" />
+                    <ui:Button Content="Reset display check and gaze profile" Appearance="Secondary" Command="{Binding ResetCalibrationCommand}" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <TextBlock Text="Diagnostics" FontWeight="SemiBold" Margin="0,0,0,8" />
+                    <DockPanel Margin="0,0,0,8">
+                        <ui:ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding ShowPerformanceMetrics}" />
+                        <TextBlock Text="Show machine and latency placeholders" VerticalAlignment="Center" />
+                    </DockPanel>
+                    <DockPanel Margin="0,0,0,8">
+                        <ui:ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding FileLoggingEnabled}" />
+                        <TextBlock Text="Write a local log" VerticalAlignment="Center" />
+                    </DockPanel>
+                    <ItemsControl ItemsSource="{Binding MetricLines}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" Style="{StaticResource SubtleText}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

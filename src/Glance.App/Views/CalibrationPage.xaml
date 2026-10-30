@@ -1,0 +1,50 @@
+<Page x:Class="Glance.App.Views.CalibrationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="clr-namespace:Glance.App.Views"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      Title="Calibration"
+      Background="Transparent">
+    <Page.Resources>
+        <local:NonEmptyConverter x:Key="NonEmpty" />
+    </Page.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="8,48,8,24">
+        <StackPanel MaxWidth="760">
+            <TextBlock Text="Calibration" Style="{StaticResource PageTitle}" />
+            <TextBlock Style="{StaticResource SubtleText}" Margin="0,0,0,12"
+                       Text="Look at each dot in turn. Glance saves the calibration when the last dot is done." />
+            <ui:InfoBar Title="Calibration"
+                        Message="{Binding Prompt}"
+                        Severity="Warning"
+                        IsOpen="True"
+                        IsClosable="False"
+                        Margin="0,0,0,12" />
+            <ui:InfoBar Title="Display arrangement"
+                        Message="{Binding Warning}"
+                        Severity="Informational"
+                        IsOpen="{Binding Warning, Converter={StaticResource NonEmpty}}"
+                        IsClosable="False"
+                        Margin="0,0,0,12" />
+            <Border Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <TextBlock Text="{Binding Summary}" TextWrapping="Wrap" Margin="0,0,0,8" />
+                    <ItemsControl ItemsSource="{Binding Displays}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,0,0,8">
+                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding Detail}" Style="{StaticResource SubtleText}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+            <StackPanel Orientation="Horizontal">
+                <ui:Button Content="Start calibration" Appearance="Primary" Command="{Binding StartCommand}" Margin="0,0,8,0" />
+                <ui:Button Content="Show target again" Appearance="Secondary" Command="{Binding ShowTargetCommand}" Margin="0,0,8,0" />
+                <ui:Button Content="Cancel" Appearance="Transparent" Command="{Binding CancelCommand}" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

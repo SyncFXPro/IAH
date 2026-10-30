@@ -1,0 +1,29 @@
+<ui:FluentWindow x:Class="Glance.App.Views.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 Title="Glance"
+                 Width="1080"
+                 Height="820"
+                 MinWidth="880"
+                 MinHeight="600"
+                 ExtendsContentIntoTitleBar="True"
+                 WindowBackdropType="Mica"
+                 WindowCornerPreference="Round"
+                 WindowStartupLocation="CenterScreen"
+                 FontFamily="Segoe UI Variable Text, Segoe UI">
+    <Grid>
+        <ui:TitleBar Title="Glance">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="pack://application:,,,/Assets/glance.png" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+        <ui:NavigationView x:Name="RootNavigation"
+                           Padding="12,0,12,0"
+                           OpenPaneLength="220"
+                           PaneDisplayMode="Left"
+                           IsBackButtonVisible="Collapsed"
+                           MenuItemsSource="{Binding MenuItems}"
+                           FooterMenuItemsSource="{Binding FooterMenuItems}" />
+    </Grid>
+</ui:FluentWindow>
